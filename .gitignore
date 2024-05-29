@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Plex.AspNetCore.OData.DynamicModel/bin
+/.vs
+/Plex.AspNetCore.OData.DynamicModel/obj
