@@ -2,8 +2,9 @@
 public class PlexODataOptions
 {
     public string RoutePrefix { get; set; } = "odata";
+    public string DynamicControllerName { get; set; } = "HandleAll";
     public int MaxPageSize { get; set; } = 1000;
-    public int MaxTopSize { get; set; } = 1000;
+    public int? MaxTopSize { get; set; }
     public string ContainerNamespaceName { get; set; } = "external";
     public string ContainerName { get; set; } = "container";
     public string[] ListSchemaNameSupport { get; set; } = { "external", "aggregated" };

@@ -14,7 +14,8 @@ public class PlexODataRoutingApplicationModelProvider : IApplicationModelProvide
                 IOptions<PlexODataOptions> plexOptions)
     {
         _plexOptions = plexOptions.Value;
-        options.Value.AddRouteComponents($"{_plexOptions.RoutePrefix}/{{datasource}}", EdmCoreModel.Instance).EnableQueryFeatures(100);
+        options.Value.AddRouteComponents($"{_plexOptions.RoutePrefix}/{{datasource}}", EdmCoreModel.Instance)
+                     .EnableQueryFeatures(_plexOptions.MaxTopSize);
     }
 
     /// <summary>
@@ -28,13 +29,13 @@ public class PlexODataRoutingApplicationModelProvider : IApplicationModelProvide
         string prefix = $"{_plexOptions.RoutePrefix}/{{datasource}}";
         foreach (var controllerModel in context.Result.Controllers)
         {
-            if (controllerModel.ControllerName == "HandleAll")
+            if (controllerModel.ControllerName.Equals(_plexOptions.DynamicControllerName, StringComparison.InvariantCultureIgnoreCase))
             {
                 ProcessHandleAll(prefix, model, controllerModel);
                 continue;
             }
 
-            if (controllerModel.ControllerName == "Metadata")
+            if (controllerModel.ControllerName.Equals("Metadata", StringComparison.InvariantCultureIgnoreCase))
             {
                 ProcessMetadata(prefix, model, controllerModel);
                 continue;

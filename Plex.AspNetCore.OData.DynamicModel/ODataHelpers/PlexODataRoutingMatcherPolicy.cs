@@ -43,7 +43,7 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
     /// <param name="candidates">The CandidateSet.</param>
     /// <returns>The task.</returns>
     [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
-    public Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
+    public async Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
     {
         ArgumentNullException.ThrowIfNull(httpContext);
 
@@ -52,7 +52,7 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
         {
             // If we have the OData path setting, it means there's some Policy working.
             // Let's skip this default OData matcher policy.
-            return Task.CompletedTask;
+            return;// Task.CompletedTask;
         }
 
         // The goal of this method is to perform the final matching:
@@ -62,7 +62,7 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
         // Perform overload resolution for functions by looking at the candidates and their metadata.
         for (var i = 0; i < candidates.Count; i++)
         {
-            ref CandidateState candidate = ref candidates[i];
+            CandidateState candidate = candidates[i];
             if (!candidates.IsValidCandidate(i))
             {
                 continue;
@@ -74,7 +74,7 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
                 continue;
             }
 
-            IEdmModel? model = GetEdmModel(candidate.Values);
+            IEdmModel? model = await GetEdmModel(candidate.Values);
             if (model == null)
             {
                 continue;
@@ -102,10 +102,10 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
             }
         }
 
-        return Task.CompletedTask;
+        return;// Task.CompletedTask;
     }
 
-    private static void MergeRouteValues(RouteValueDictionary updates, RouteValueDictionary? source)
+    static void MergeRouteValues(RouteValueDictionary updates, RouteValueDictionary? source)
     {
         if (source == null) return;
         foreach (var data in updates)
@@ -114,7 +114,7 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
         }
     }
 
-    private IEdmModel? GetEdmModel(RouteValueDictionary? routeValues)
+    async Task<IEdmModel?> GetEdmModel(RouteValueDictionary? routeValues)
     {
         if (routeValues == null)
         {
@@ -133,6 +133,6 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
         }
 
 
-        return _dataSource.GetEdmModel(dataSource);
+        return await _dataSource.GetEdmModelAsync(dataSource);
     }
 }

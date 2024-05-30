@@ -20,22 +20,22 @@ public static class PlexODataQueryOptionExtensions
         //Apply $skip
         if (queryOptions.Skip != null)
         {
-            query = string.Format("{0} OFFSET {1} ROWS ", query, queryOptions.Skip.Value);
+            query += $" OFFSET {queryOptions.Skip.Value} ROWS ";
         }
         else
         {
-            query = string.Format("{0} OFFSET {1} ROWS ", query, 0);
+            query += " OFFSET 0 ROWS ";
         }
 
         //Apply $top
         if (queryOptions.Top != null)
         {
             var top = queryOptions.Top.Value > plexODataOptions.MaxPageSize ? plexODataOptions.MaxPageSize + 1 : queryOptions.Top.Value;
-            query = string.Format("{0} FETCH NEXT {1} ROWS ONLY; ", query, top);
+            query += $" FETCH NEXT {top} ROWS ONLY; ";
         }
         else
         {
-            query = string.Format("{0} FETCH NEXT {1} ROWS ONLY; ", query, plexODataOptions.MaxPageSize + 1);
+            query += $" FETCH NEXT {plexODataOptions.MaxPageSize + 1} ROWS ONLY; ";
         }
         return query;
     }
@@ -47,12 +47,12 @@ public static class PlexODataQueryOptionExtensions
         {
             var orderByBinder = new PlexOrderByBinder();
             string orderBy = orderByBinder.BindOrderByQueryOption(orderByQuery);
-            query = string.Format("{0} {1} ", query, orderBy);
+            query += $" {orderBy}";
         }
         else
         {
             IEdmProperty? defaultOrderByColumn = edmEntityType.DeclaredProperties.FirstOrDefault();
-            if (defaultOrderByColumn != null) query = string.Format("{0} order by {1} asc ", query, defaultOrderByColumn.Name);
+            if (defaultOrderByColumn != null) query += $" ORDER BY {defaultOrderByColumn.Name} ASC ";
         }
 
         return query;
@@ -66,11 +66,11 @@ public static class PlexODataQueryOptionExtensions
         var whereClause = odataFilterBinder.BindFilter(filterQuery);
         if (hasWhereClause)
         {
-            query = string.Format("{0} AND {1} ", query, whereClause);
+            query += $" AND {whereClause} ";
         }
         else
         {
-            query = string.Format("{0} where {1} ", query, whereClause);
+            query += $" WHERE {whereClause} ";
         }
 
         return query;
