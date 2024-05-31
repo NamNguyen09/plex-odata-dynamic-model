@@ -1,6 +1,7 @@
 ﻿namespace Plex.AspNetCore.OData.DynamicModel.ODataHelpers;
 public class PlexODataOptions
 {
+    public string? ODataBaseAddress { get; set; }
     public string RoutePrefix { get; set; } = "odata";
     public string DynamicControllerName { get; set; } = "HandleAll";
     public int MaxPageSize { get; set; } = 1000;

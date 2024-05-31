@@ -6,4 +6,5 @@ public interface IDataSource
 {
     Task<IEdmModel> GetEdmModelAsync(string dataSource);
     Task<EdmEntityObjectCollection?> GetAsync(DataSourceParameter dataSourceParam);
+    public string? DataSourceName { get; }
 }

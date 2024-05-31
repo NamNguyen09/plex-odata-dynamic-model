@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.OData.Routing.Template;
 using Microsoft.AspNetCore.Routing.Matching;
+using Microsoft.Extensions.Options;
 using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
 
@@ -12,19 +13,20 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
 {
     private readonly IODataTemplateTranslator _translator;
     private readonly IDataSource _dataSource;
+    private readonly PlexODataOptions _plexOptions;
     public PlexODataRoutingMatcherPolicy(IODataTemplateTranslator translator,
-                                         IDataSource dataSource)
+                                         IDataSource dataSource,
+                                         IOptions<PlexODataOptions> plexOptions)
     {
         _translator = translator;
         _dataSource = dataSource;
+        _plexOptions = plexOptions.Value;
     }
 
     /// <summary>
     /// Gets a value that determines the order of this policy.
     /// </summary>
     public override int Order => 900 - 1;
-
-    public string? DataSourceName { get; }
 
     /// <summary>
     /// Returns a value that indicates whether the matcher applies to any endpoint in endpoints.
@@ -53,6 +55,11 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
             // If we have the OData path setting, it means there's some Policy working.
             // Let's skip this default OData matcher policy.
             return;// Task.CompletedTask;
+        }
+
+        if (!string.IsNullOrWhiteSpace(_plexOptions.ODataBaseAddress))
+        {
+            odataFeature.BaseAddress = _plexOptions.ODataBaseAddress;
         }
 
         // The goal of this method is to perform the final matching:
