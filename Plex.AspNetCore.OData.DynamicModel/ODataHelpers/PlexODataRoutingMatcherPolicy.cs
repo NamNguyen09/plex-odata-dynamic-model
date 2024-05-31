@@ -9,6 +9,9 @@ using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
 
 namespace Plex.AspNetCore.OData.DynamicModel.ODataHelpers;
+/// <summary>
+/// Reference https://github.com/OData/AspNetCoreOData/tree/main/sample/ODataDynamicModel
+/// </summary>
 public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
 {
     private readonly IODataTemplateTranslator _translator;
@@ -57,11 +60,6 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
             return;// Task.CompletedTask;
         }
 
-        if (!string.IsNullOrWhiteSpace(_plexOptions.ODataBaseAddress))
-        {
-            odataFeature.BaseAddress = _plexOptions.ODataBaseAddress;
-        }
-
         // The goal of this method is to perform the final matching:
         // Map between route values matched by the template and the ones we want to expose to the action for binding.
         // (tweaking the route values is fine here)
@@ -81,7 +79,7 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
                 continue;
             }
 
-            IEdmModel? model = await GetEdmModel(candidate.Values);
+            IEdmModel? model = await GetEdmModel(candidate.Values, odataFeature, metadata);
             if (model == null)
             {
                 continue;
@@ -120,8 +118,9 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
             source[data.Key] = data.Value;
         }
     }
-
-    async Task<IEdmModel?> GetEdmModel(RouteValueDictionary? routeValues)
+    async Task<IEdmModel?> GetEdmModel(RouteValueDictionary? routeValues,
+                                       IODataFeature odataFeature,
+                                       IODataRoutingMetadata metadata)
     {
         if (routeValues == null)
         {
@@ -139,7 +138,11 @@ public class PlexODataRoutingMatcherPolicy : MatcherPolicy, IEndpointSelectorPol
             return null;
         }
 
-
+        if (!string.IsNullOrWhiteSpace(_plexOptions.ODataBaseAddress))
+        {
+            odataFeature.BaseAddress = $"{_plexOptions.ODataBaseAddress.
+                                          TrimEnd('/')}/{metadata.Prefix.Replace("{datasource}", dataSource)}";
+        }
         return await _dataSource.GetEdmModelAsync(dataSource);
     }
 }

@@ -11,7 +11,7 @@
     <PackageTags>OData;DynamicModel</PackageTags>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>8.2.7</Version>
+    <Version>8.2.8</Version>
 	<!--<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>-->
 	<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 	<!-- Let's generate our own assembly info -->
@@ -19,7 +19,7 @@
 	<OutputType>Library</OutputType>
 	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	<IsPackable>true</IsPackable>
-	<PackageReleaseNotes>Support to set BaseAddress for OData</PackageReleaseNotes>
+	<PackageReleaseNotes>Append OData prefix to BaseAddress of OData context</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

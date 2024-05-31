@@ -7,6 +7,9 @@ using Microsoft.OData.Edm;
 using Plex.AspNetCore.OData.DynamicModel.TemplateSegments;
 
 namespace Plex.AspNetCore.OData.DynamicModel.ODataHelpers;
+/// <summary>
+/// Reference https://github.com/OData/AspNetCoreOData/tree/main/sample/ODataDynamicModel
+/// </summary>
 public class PlexODataRoutingApplicationModelProvider : IApplicationModelProvider
 {
     private readonly PlexODataOptions _plexOptions;

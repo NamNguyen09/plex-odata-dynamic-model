@@ -4,6 +4,9 @@ using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
 
 namespace Plex.AspNetCore.OData.DynamicModel.TemplateSegments;
+/// <summary>
+/// Reference https://github.com/OData/AspNetCoreOData/tree/main/sample/ODataDynamicModel
+/// </summary>
 public class PlexEntitySetTemplateSegment : ODataSegmentTemplate
 {
     public override IEnumerable<string> GetTemplates(ODataRouteOptions options)

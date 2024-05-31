@@ -32,5 +32,5 @@ app.Run();
 That's it.
 
 ## 3. References:
-- [ODataRoutingSample](https://github.com/OData/AspNetCoreOData/tree/main/sample/ODataRoutingSample): ASP.NET Core OData sample project in this repo.
+- [ODataDynamicModel](https://github.com/OData/AspNetCoreOData/tree/main/sample/ODataDynamicModel): ASP.NET Core OData sample project in this repo.
   
